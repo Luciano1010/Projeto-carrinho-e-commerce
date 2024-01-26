@@ -1,4 +1,4 @@
-import { Children, createContext, ReactNode, useState } from "react";
+import { createContext, ReactNode, useState } from "react";
 import { productsProps } from "../pages/home";
 
 interface CartContextData{
@@ -35,20 +35,27 @@ function CartProvider({children}: CartProviderProps){
         const indexItem = cart.findIndex(item => item.id === newItem.id)
 
         if(indexItem !== -1){
-            let cartList = cart;
+            let cartList = [...cart];
 
-            cartList[indexItem].amount = cartList[indexItem].amount = +1;
-            cartList[indexItem].total = cartList[indexItem].amount * cartList[indexItem].price
+            cartList[indexItem] = {
+                ...cartList[indexItem],
+                amount: cartList[indexItem].amount + 1,
+                total: (cartList[indexItem].amount + 1) * cartList[indexItem].price
+            };
             setCart(cartList) 
+            totalResulCart(cartList)
             return;           
+        } else {
+            let data = {
+                ...newItem,
+                amount: 1,
+                total: newItem.price
+            };
+            setCart(prevCart => [...prevCart, data]);
+            totalResulCart([...cart, data]);
         }
-        let data = {
-            ...newItem,
-            amount: 1,
-            total: newItem.price
-        }
+    
 
-        setCart( products => [...products, data])
     }
 
     function removeItemsCart(product: CartProps){
@@ -69,7 +76,7 @@ function CartProvider({children}: CartProviderProps){
     }
 
     function totalResulCart(items: CartProps[]){
-        let myCart = items;
+        let myCart = [...items];
         let result = myCart.reduce((acc, obj) => {return acc + obj.total}, 0 )
         const resultFormated = result.toLocaleString("pt-br", {style: "currency", currency: "BRL"})
         setTotal(resultFormated)

@@ -6,6 +6,9 @@ export function Cart(){
 
     const { cart, total, addItemCart, removeItemsCart } = useContext(CartContext)
 
+    
+   
+
     return(
         <div className="w-full max-w-6xl mx-auto">
             <h1 className="font-medium text-2xl text-center my-4">Meu Carrinho</h1>
@@ -27,7 +30,7 @@ export function Cart(){
             className="w-28"
             />
 
-            <strong>{item.price}</strong>
+            <strong>Preço: {item.price}</strong>
 
             <div className="flex item-center justify-center gap-3">
                 <button onClick={() => removeItemsCart(item)} className="bg-slate-600 px-2  rounded text-white font-medium flex items-center justify-center">
